@@ -260,4 +260,4 @@ app.get('/members/:state',(req, res) => {
 //Middleware
 
 var port = process.env.PORT || 3000;
-app.listen(port)
+app.listen(port);
