@@ -253,4 +253,6 @@ app.get('/members/:state',(req, res) => {
   });
 });
 //Middleware
-app.listen(3000)
+
+var port = process.env.NODE_ENV || 3000;
+app.listen(port)
