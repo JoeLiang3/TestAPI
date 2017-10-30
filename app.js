@@ -31,7 +31,7 @@ var con = mysql.createConnection({
               database : 'heroku_44af54f55baae38',
               multipleStatements: true
             });
-var cor/s = require('cors')
+var cors = require('cors')
 global.db = con;
 
 //// all environments
