@@ -21,42 +21,19 @@ var Congress = require( 'propublica-congress-node' );
 var client = new Congress( 'RmrxLK9M6LrHgHTjMbuoIy1sEg5nPhMMx52J4HAe' );
 var cors = require('cors')
 var con = mysql.createConnection({
-              // host     : 'localhost',
-              // user     : 'root',
-              // password : '',
-              // database : 'rippleDB',
-              // multipleStatements: true
-              host     : 'us-cdbr-iron-east-05.cleardb.net',
-              user     : 'be9dbda2b18efa',
-              password : 'f5254516',
-              database : 'heroku_44af54f55baae38',
+              host     : 'localhost',
+              user     : 'root',
+              password : '',
+              database : 'rippleDB',
               multipleStatements: true
+              // host     : 'us-cdbr-iron-east-05.cleardb.net',
+              // user     : 'be9dbda2b18efa',
+              // password : 'f5254516',
+              // database : 'heroku_44af54f55baae38',
+              // multipleStatements: true
             });
 
-var connection;
 
-function handleDisconnect() {
-  connection = mysql.createConnection(con); // Recreate the connection, since
-                                                  // the old one cannot be reused.
-
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
-
-handleDisconnect();
 global.db = con;
 
 // all environments
@@ -166,85 +143,85 @@ con.connect(function(err) {
     console.log("User table created");
   });
 
-  // con.query("DROP TABLE IF EXISTS bills; \ CREATE TABLE bills ( \
-  //           id int NOT NULL AUTO_INCREMENT, \ billID varchar(255) NOT NULL default '', \ type varchar(255) NOT NULL default '', \
-  //           Bnumber varchar(255) NOT NULL default '', \ title varchar(255) NOT NULL default '', \
-  //           sponsorTitle varchar(255) NOT NULL default '', \ sponsor varchar(255) NOT NULL default '', \
-  //           sponsorId varchar(255) NOT NULL default '', \ sponsorState varchar(255) NOT NULL default '', \
-  //           partyAffil varchar(255) NOT NULL default '', \ sponsorUri varchar(255) NOT NULL default '', \
-  //           gpoPdf varchar(255) NOT NULL default '', \ congressUrl varchar(255) NOT NULL default '', \
-  //           govtrackUrl varchar(255) NOT NULL default '', \ isActive varchar(255) NOT NULL default '', \
-  //           lastDate varchar(255) NOT NULL default '', \ housePassage varchar(255) NOT NULL default '', \
-  //           senatePassage varchar(255) NOT NULL default '', \ isEnacted varchar(255) NOT NULL default '', \
-  //           isVetoed varchar(255) NOT NULL default '', \ coSponsors varchar(255) NOT NULL default '', \
-  //           committees varchar(255) NOT NULL default '', \ committeeCodes varchar(255) NOT NULL default '', \
-  //           subCommitteeCodes varchar(255) NOT NULL default '', \ primarySubject varchar(255) NOT NULL default '', \
-  //           description varchar(255) NOT NULL default '', \ shortDescription varchar(255) NOT NULL default '', \
-  //           latestMajorAction varchar(255) NOT NULL default '', \ PRIMARY KEY (id))ENGINE=INNODB;",
-  // function (err, result) {
-  //   if (err) throw err;
-  //   console.log("Table created");
-  // });
-  //
-  // client.billsRecent({
-  //     congressNumber: '115',
-  //     chamber: 'house',
-  //     bill_type:'updated'
-  // }).then(function(res) {
-  //     num_bills = res.results[0].num_results;
-  //     for(var n = 0; n < num_bills; n++)
-  //     {
-  //       billID= (res.results[0].bills[n].bill_id);
-  //       type= (res.results[0].bills[n].bill_type);
-  //       Bnumber= (res.results[0].bills[n].number);
-  //
-  //       title= (res.results[0].bills[n].title).replace("'", "''");
-  //       //   BillSponsorTitle= (res.results[0].bills[n].sponsor_title);
-  //       sponsor= (res.results[0].bills[n].sponsor_name).replace("'", "''");
-  //
-  //       sponsorId= (res.results[0].bills[n].sponsor_id);
-  //       sponsorState= (res.results[0].bills[n].sponsor_state);
-  //       partyAffil= (res.results[0].bills[n].sponsor_party=="D") ? "Democrat" : "Republican";
-  //
-  //       sponsorUri= (res.results[0].bills[n].sponsor_uri);
-  //       gpoPdf= (res.results[0].bills[n].bill_gpo_pdf_uri);
-  //       congressUrl= (res.results[0].bills[n].sponsor_id);
-  //
-  //       govtrackUrl= (res.results[0].bills[n].govtrack_url);
-  //       isActive= (res.results[0].bills[n].active);
-  //       lastDate= (res.results[0].bills[n].latest_major_action_date);
-  //
-  //       housePassage= (res.results[0].bills[n].house_passage);
-  //       senatePassage= (res.results[0].bills[n].senate_passage);
-  //       isEnacted= (res.results[0].bills[n].enacted);
-  //
-  //       isVetoed= (res.results[0].bills[n].vetoed);
-  //       coSponsors= (res.results[0].bills[n].cosponsors);
-  //       committees= (res.results[0].bills[n].committees);
-  //
-  //       committeeCodes= (res.results[0].bills[n].committee_codes);
-  //       subCommitteeCodes= (res.results[0].bills[n].subcommittee_codes);
-  //       primarySubject= (res.results[0].bills[n].primary_subject);
-  //
-  //       description= (res.results[0].bills[n].summary);
-  //       shortDescription= (res.results[0].bills[n].summary_short);
-  //       //BillLatestMajorAction= (res.results[0].bills[n].latest_major_action);
-  //
-  //       var sql = "INSERT INTO bills(billID,type,Bnumber,title,sponsor,sponsorId,sponsorState,"+
-  //                   "partyAffil,sponsorUri,gpoPdf,congressUrl,govtrackUrl,isActive,lastDate,"+
-  //                   "housePassage,senatePassage,isEnacted,isVetoed,coSponsors,committees,committeeCodes,"+
-  //                   "subCommitteeCodes,primarySubject,description,shortDescription) "+
-  //                   "VALUES ('"+billID+"', '"+type+"', '"+Bnumber+"', '"+title+"', '"+sponsor+"', '"+sponsorId+"', '"
-  //                   +sponsorState+"', '"+partyAffil+"','"+sponsorUri+"', '"+gpoPdf+"', '"+congressUrl+"', '"
-  //                   +govtrackUrl+"', '"+isActive+"', '"+lastDate+"','"+housePassage+"', '"+senatePassage+"', '"
-  //                   +isEnacted+"', '"+isVetoed+"', '"+coSponsors+"', '"+committees+"','"+committeeCodes+"','"
-  //                   +subCommitteeCodes+"', '"+primarySubject+"', '"+description+"', '"+shortDescription+"')";
-  //       con.query(sql, function (err, result) {
-  //       if (err) console.log(err);
-  //     });
-  //   }
-  //   console.log("Bills table filled");
-  // });
+  con.query("DROP TABLE IF EXISTS bills; \ CREATE TABLE bills ( \
+            id int NOT NULL AUTO_INCREMENT, \ billID varchar(255) NOT NULL default '', \ type varchar(255) NOT NULL default '', \
+            Bnumber varchar(255) NOT NULL default '', \ title text NOT NULL, \
+            sponsorTitle varchar(255) NOT NULL default '', \ sponsor varchar(255) NOT NULL default '', \
+            sponsorId varchar(255) NOT NULL default '', \ sponsorState varchar(255) NOT NULL default '', \
+            partyAffil varchar(255) NOT NULL default '', \ sponsorUri varchar(255) NOT NULL default '', \
+            gpoPdf varchar(255) NOT NULL default '', \ congressUrl varchar(255) NOT NULL default '', \
+            govtrackUrl varchar(255) NOT NULL default '', \ isActive varchar(255) NOT NULL default '', \
+            lastDate varchar(255) NOT NULL default '', \ housePassage varchar(255) NOT NULL default '', \
+            senatePassage varchar(255) NOT NULL default '', \ isEnacted varchar(255) NOT NULL default '', \
+            isVetoed varchar(255) NOT NULL default '', \ coSponsors varchar(255) NOT NULL default '', \
+            committees varchar(255) NOT NULL default '', \ committeeCodes varchar(255) NOT NULL default '', \
+            subCommitteeCodes varchar(255) NOT NULL default '', \ primarySubject varchar(255) NOT NULL default '', \
+            description varchar(255) NOT NULL default '', \ shortDescription varchar(255) NOT NULL default '', \
+            latestMajorAction varchar(255) NOT NULL default '', \ PRIMARY KEY (id))ENGINE=INNODB;",
+  function (err, result) {
+    if (err) throw err;
+    console.log("Table created");
+  });
+
+  client.billsRecent({
+      congressNumber: '115',
+      chamber: 'house',
+      bill_type:'updated'
+  }).then(function(res) {
+      num_bills = res.results[0].num_results;
+      for(var n = 0; n < num_bills; n++)
+      {
+        billID= (res.results[0].bills[n].bill_id);
+        type= (res.results[0].bills[n].bill_type);
+        Bnumber= (res.results[0].bills[n].number);
+
+        title= (res.results[0].bills[n].title).replace("'", "''");
+        //   BillSponsorTitle= (res.results[0].bills[n].sponsor_title);
+        sponsor= (res.results[0].bills[n].sponsor_name).replace("'", "''");
+
+        sponsorId= (res.results[0].bills[n].sponsor_id);
+        sponsorState= (res.results[0].bills[n].sponsor_state);
+        partyAffil= (res.results[0].bills[n].sponsor_party=="D") ? "Democrat" : "Republican";
+
+        sponsorUri= (res.results[0].bills[n].sponsor_uri);
+        gpoPdf= (res.results[0].bills[n].bill_gpo_pdf_uri);
+        congressUrl= (res.results[0].bills[n].sponsor_id);
+
+        govtrackUrl= (res.results[0].bills[n].govtrack_url);
+        isActive= (res.results[0].bills[n].active);
+        lastDate= (res.results[0].bills[n].latest_major_action_date);
+
+        housePassage= (res.results[0].bills[n].house_passage);
+        senatePassage= (res.results[0].bills[n].senate_passage);
+        isEnacted= (res.results[0].bills[n].enacted);
+
+        isVetoed= (res.results[0].bills[n].vetoed);
+        coSponsors= (res.results[0].bills[n].cosponsors);
+        committees= (res.results[0].bills[n].committees);
+
+        committeeCodes= (res.results[0].bills[n].committee_codes);
+        subCommitteeCodes= (res.results[0].bills[n].subcommittee_codes);
+        primarySubject= (res.results[0].bills[n].primary_subject);
+
+        description= (res.results[0].bills[n].summary);
+        shortDescription= (res.results[0].bills[n].summary_short);
+        //BillLatestMajorAction= (res.results[0].bills[n].latest_major_action);
+
+        var sql = "INSERT INTO bills(billID,type,Bnumber,title,sponsor,sponsorId,sponsorState,"+
+                    "partyAffil,sponsorUri,gpoPdf,congressUrl,govtrackUrl,isActive,lastDate,"+
+                    "housePassage,senatePassage,isEnacted,isVetoed,coSponsors,committees,committeeCodes,"+
+                    "subCommitteeCodes,primarySubject,description,shortDescription) "+
+                    "VALUES ('"+billID+"', '"+type+"', '"+Bnumber+"', '"+title+"', '"+sponsor+"', '"+sponsorId+"', '"
+                    +sponsorState+"', '"+partyAffil+"','"+sponsorUri+"', '"+gpoPdf+"', '"+congressUrl+"', '"
+                    +govtrackUrl+"', '"+isActive+"', '"+lastDate+"','"+housePassage+"', '"+senatePassage+"', '"
+                    +isEnacted+"', '"+isVetoed+"', '"+coSponsors+"', '"+committees+"','"+committeeCodes+"','"
+                    +subCommitteeCodes+"', '"+primarySubject+"', '"+description+"', '"+shortDescription+"')";
+        con.query(sql, function (err, result) {
+        if (err) console.log(err);
+      });
+    }
+    console.log("Bills table filled");
+  });
 
 // development only
 
