@@ -34,7 +34,7 @@ var con = mysql.createConnection({
 var cors = require('cors')
 global.db = con;
 
-//// all environments
+// all environments
 app.use(cors());
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
