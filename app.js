@@ -19,6 +19,7 @@ var request = require('request');
 var bodyParser=require("body-parser");
 var Congress = require( 'propublica-congress-node' );
 var client = new Congress( 'RmrxLK9M6LrHgHTjMbuoIy1sEg5nPhMMx52J4HAe' );
+var cors = require('cors')
 var con = mysql.createConnection({
               // host     : 'localhost',
               // user     : 'root',
