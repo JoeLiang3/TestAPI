@@ -31,10 +31,11 @@ var con = mysql.createConnection({
               database : 'heroku_44af54f55baae38',
               multipleStatements: true
             });
-
+var cors = require('cors')
 global.db = con;
 
 // all environments
+app.use(cors());
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
