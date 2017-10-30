@@ -19,10 +19,15 @@ var bodyParser=require("body-parser");
 var Congress = require( 'propublica-congress-node' );
 var client = new Congress( 'RmrxLK9M6LrHgHTjMbuoIy1sEg5nPhMMx52J4HAe' );
 var con = mysql.createConnection({
-              host     : 'localhost',
-              user     : 'root',
-              password : '',
-              database : 'rippleDB',
+              // host     : 'localhost',
+              // user     : 'root',
+              // password : '',
+              // database : 'rippleDB',
+              // multipleStatements: true
+              host     : 'us-cdbr-iron-east-05.cleardb.net',
+              user     : 'be9dbda2b18efa',
+              password : 'f5254516',
+              database : 'heroku_44af54f55baae38',
               multipleStatements: true
             });
 
